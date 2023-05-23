@@ -8,6 +8,14 @@ export default (): Router => {
 
   router.post("/restaurant/create", restaurantcontroller.create);
   router.get("/restaurant", restaurantcontroller.getAllRestaurants);
+  router.put(
+    "/restaurant/:restaurant_id",
+    restaurantcontroller.updateRestaurant
+  );
+  router.delete(
+    "/restaurant/:restaurant_id",
+    restaurantcontroller.deleteRestaurant
+  );
 
   return router;
 };
