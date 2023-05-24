@@ -9,7 +9,7 @@ export default class RestaurantController {
       const { name, document, type } = req.body;
 
       if (!name || !document || !type)
-        return res.status(404).send("Dados Invalidos!");
+        return res.status(400).send("Dados Invalidos!");
 
       const restaurant = new Restaurant(name, document, type);
       const createdrestaurant = await restaurantRepository.save(restaurant);
@@ -27,6 +27,23 @@ export default class RestaurantController {
       let restaurants: Restaurant[] = await restaurantRepository.find();
 
       return res.status(200).send(restaurants);
+    } catch (error) {
+      return res.status(500).json({ Error: error });
+    }
+  };
+
+  getRestaurantById = async (req: Request, res: Response) => {
+    try {
+      const restaurantRepository = AppDataSource.getRepository(Restaurant);
+      const restaurant_id = Number(req.params["restaurant_id"]);
+
+      let restaurant: any = await restaurantRepository.findOneBy({
+        id: restaurant_id,
+      });
+
+      if (!restaurant) return res.status(400);
+
+      return res.status(200).send(restaurant);
     } catch (error) {
       return res.status(500).json({ Error: error });
     }
@@ -72,7 +89,39 @@ export default class RestaurantController {
 
       return res.sendStatus(204);
     } catch (e) {
-      return res.status(e.statusCode).json({ error: e.message });
+      return res.status(400).json({ error: "Erro" });
+    }
+  };
+
+  isOpen = async (req: Request, res: Response) => {
+    try {
+      const restaurantRepository = AppDataSource.getRepository(Restaurant);
+      const { time, day } = req.body;
+
+      if (!time || !day) return res.status(400).send("Dados Invalidos!");
+
+      const restaurant_id = Number(req.params["restaurant_id"]);
+
+      let restaurant: any = await restaurantRepository.findOneBy({
+        id: restaurant_id,
+      });
+
+      if (!restaurant) return res.status(404);
+
+      for (let i = 0; i < restaurant.rule.length; i++) {
+        if (restaurant.rule[i].day == day) {
+          if (
+            parseInt(time) >= parseInt(restaurant.rule[i].start) &&
+            parseInt(time) < parseInt(restaurant.rule[i].end)
+          ) {
+            return res.status(200).send("open");
+          }
+        }
+      }
+
+      return res.status(200).send("close");
+    } catch {
+      return res.status(400);
     }
   };
 }

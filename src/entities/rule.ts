@@ -15,12 +15,14 @@ export class Rule {
   @Column()
   day: string;
 
-  @ManyToOne(() => Restaurant, (restaurant) => restaurant.rule)
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.rule, {
+    onDelete: "CASCADE",
+  })
   restaurant: Restaurant;
 
-  //   constructor(name: string, document: string, type: string) {
-  //     this.name = name;
-  //     this.document = document;
-  //     this.type = type;
-  //   }
+  constructor(start: string, end: string, day: string) {
+    this.start = start;
+    this.end = end;
+    this.day = day;
+  }
 }

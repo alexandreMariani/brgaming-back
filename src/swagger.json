@@ -1,0 +1,124 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "BrGaming",
+    "description": "full-stack challenge",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Restaurants",
+      "description": "API for Restaurants in the system"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/api/restaurant/create": {
+      "post": {
+        "tags": ["Restaurants"],
+        "description": "Create new restaurant in system",
+        "parameters": [
+          {
+            "name": "restaurant",
+            "in": "body",
+            "description": "Restaurant that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "New restaurant is created",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          }
+        }
+      }
+    },
+    "/api/restaurant": {
+      "get": {
+        "tags": ["Restaurants"],
+        "summary": "Get all restaurants in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Restaurants"
+            }
+          }
+        }
+      }
+    },
+    "/api/restaurants/{restaurant_id}": {
+      "parameters": [
+        {
+          "name": "restaurant_id",
+          "in": "path",
+          "required": true,
+          "description": "ID of restaurant that we want to find",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": ["Restaurants"],
+        "summary": "Get restaurant with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete restaurant with given ID",
+        "tags": ["Restaurants"],
+        "responses": {
+          "204": {
+            "description": "Resturant is deleted",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Restaurant": {
+      "required": ["name", "type", "document"],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        }
+      }
+    },
+
+    "Restaurants": {
+      "type": "array",
+      "$ref": "#/definitions/Restaurant"
+    }
+  }
+}
