@@ -5,11 +5,11 @@ dotenv.config();
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: process.env.HOST,
+  host: "motty.db.elephantsql.com",
   port: 5432,
-  username: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
+  username: "lwmrhaje",
+  password: "nGevHyOZL0RMq0igUPvy5utvHyfsMCTP",
+  database: "lwmrhaje",
   synchronize: false,
   logging: false,
   entities: ["src/entities/*{.ts,.js}"],
